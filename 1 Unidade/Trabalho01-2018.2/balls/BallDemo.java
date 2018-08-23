@@ -39,11 +39,13 @@ public class BallDemo
      */
     public void bounce( int numBalls )
     {
-        int ground = 310;   // position of the ground line
+        int ground = HEIGHT-20;   // position of the ground line
         int xStart = 20;    // x-start of the ground line
-        int xLimit = 520;   // x-limit of the ground line
+        int xLimit = WIDTH-20;   // x-limit of the ground line
 
         myCanvas.setVisible(true);
+
+	drawFrame(WIDTH, HEIGHT);
 
         // draw the ground
         myCanvas.setForegroundColor(Color.blue);
@@ -59,10 +61,10 @@ public class BallDemo
 	for( int i = 0; i < numBalls ; i++){
 		Random rand = new Random();
 		int newXStart = generateRandom(xStart, xLimit);
-		//int value01 = generateRandom(xLimit, xStart);
-		//int value02 = generateRandom(xLimit, xStart);
+		int halfCanvas = myCanvas.getSize().height / 2;
+		int jump = generateRandom(0, halfCanvas);
 		int color_value = generateRandom(0, 11);
-		BouncingBall ball = new BouncingBall(newXStart, 80, 20, cores[color_value], ground, myCanvas );
+		BouncingBall ball = new BouncingBall(newXStart, jump, 20, cores[color_value], ground, myCanvas );
 		ball.draw();
 		balls.add(ball);
 	}
@@ -84,13 +86,10 @@ public class BallDemo
 	    }
             //ball.move();
             //ball2.move();
-	    
-	    // calling method to create rectagle, informing width and height
-	    drawFrame(500,300);
 
 	    // count how many of them are in the end.
 	    int valueTrue = 0;
-            
+
 	    // stop once ball has travelled a certain distance on x axis
 	    for( BouncingBall bola : balls ){
 	    	if( (bola.getXPosition() + 30) >= xLimit )
@@ -119,7 +118,7 @@ public class BallDemo
 	Dimension dim = new Dimension(width,height);
 	// Create a Rectangle with margin 20 from the top and left, and
 	// using Dimension object above.
-    	Rectangle rect = new Rectangle(20,20, dim.width,dim.height);
+    	Rectangle rect = new Rectangle(20,20, dim.width-40, dim.height-40);
 	// draw rectangle
 	myCanvas.draw(rect);
     }
