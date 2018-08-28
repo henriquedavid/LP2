@@ -39,73 +39,77 @@ public class BallDemo
      */
     public void bounce( int numBalls )
     {
-        int ground = HEIGHT-20;   // position of the ground line
-        int xStart = 20;    // x-start of the ground line
-        int xLimit = WIDTH-20;   // x-limit of the ground line
+	// Verify if there is a valid value in numBalls.
+	if( numBalls <= 0 ){
+		System.out.println("Valor inválido! Valor recebido: " + numBalls);
+		System.exit(-1); // exit if is less or equal to 0;
+	}
+
+        int ground = HEIGHT-30;   // position of the ground line
+        int xStart = 60;    // x-start of the ground line
+        int xLimit = WIDTH - 60;   // x-limit of the ground line
 
         myCanvas.setVisible(true);
-
+	
+	// Draw for the first time the rectangle
 	drawFrame(WIDTH, HEIGHT);
 
         // draw the ground
         myCanvas.setForegroundColor(Color.blue);
         myCanvas.drawLine(xStart, ground, xLimit, ground);
 
-	// create and show the balls using ArrayList
-	
-	if( numBalls <= 0 ){
-		System.out.println("Informe um valor válido! Valor recebido: " + numBalls);
-		return;
-	}
-
+	// Create each ball
 	for( int i = 0; i < numBalls ; i++){
+		// create a random number to calculate the random values
 		Random rand = new Random();
+		// create a new start to each ball
 		int newXStart = generateRandom(xStart, xLimit);
+		// verify what is the half of Canvas
 		int halfCanvas = myCanvas.getSize().height / 2;
-		int jump = generateRandom(0, halfCanvas);
+		// with halfCanvas working than just create a new values to each ball
+		int jump = generateRandom(20, halfCanvas);
+		// choose a color to each ball
 		int color_value = generateRandom(0, 11);
+		// create a new ball
 		BouncingBall ball = new BouncingBall(newXStart, jump, 20, cores[color_value], ground, myCanvas );
+		// draw the ball
 		ball.draw();
+		// add a ball to the list
 		balls.add(ball);
 	}
-
-/*
-        // create and show the balls
-        BouncingBall ball = new BouncingBall(xStart, 50, 16, Color.blue, ground, myCanvas);
-        ball.draw();
-        BouncingBall ball2 = new BouncingBall(xStart + 20, 80, 20, Color.red, ground, myCanvas);
-        ball2.draw();
-*/
 
         // Make them bounce until both have gone beyond the xLimit.
         boolean finished =  false;
         while(!finished) {
             myCanvas.wait(50);           // small delay
+	    
+	    // move each ball
 	    for( BouncingBall ball : balls ){
 	    	ball.move();
 	    }
-            //ball.move();
-            //ball2.move();
 
 	    // count how many of them are in the end.
 	    int valueTrue = 0;
 
 	    // stop once ball has travelled a certain distance on x axis
 	    for( BouncingBall bola : balls ){
-	    	if( (bola.getXPosition() + 30) >= xLimit )
+		// Verify if the ball pass the xLimits
+	    	if( (bola.getXPosition() + 10) >= xLimit ){
+			// if the ball pass the xLimit, so it is erased.
+			bola.erase();
+			// count that with that ball is out of Xlimit.
 			valueTrue++;
+		}
 	    }
 
-            if(valueTrue == balls.size()) {
-                finished = true;
-            }
-        }
-	
-	for( BouncingBall ball : balls ){
-		ball.erase();
-	}
-        //ball.erase();
-        //ball2.erase();
+	    // When every ball pass xLimits so finish the while.
+	    if(valueTrue == balls.size()){
+	    	finished = true;
+	    }
+	    
+	    // Draw rect for each time.
+	    drawFrame(WIDTH, HEIGHT);
+  	}
     }
 
     /**
@@ -123,8 +127,18 @@ public class BallDemo
 	myCanvas.draw(rect);
     }
 
+    /**
+     * Generate a random number.
+     * This method is to help to generate randons values to
+     * Ball's height and width, in a range.
+     *
+     * @param minimum value
+     * @param maximum value
+     */
     public int generateRandom(int min, int max){
-    	Random random = new Random();
+    	// creste a random object
+	Random random = new Random();
+	// calculate the number in the range.
 	return random.nextInt((max - min) + 1) + min;
     }
 }
