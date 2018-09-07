@@ -73,6 +73,11 @@ public class Vehicle{
 	 * @return The status.
 	 */
 	public String getStatus(){
+
+		if( destination.equals(null)){
+			return "There is no destination to the vehicle!";
+		}
+
 		return id + " at " + location + " headed for " + destination;
 	}
 }

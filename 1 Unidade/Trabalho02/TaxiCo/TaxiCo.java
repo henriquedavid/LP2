@@ -121,4 +121,42 @@ public class TaxiCo
         destinations.add("Sainsbury's");
         destinations.add("Darwin");
     }
+
+    /**
+     * Return a vehicle which goes to the destination that the
+     * the user wants. It can be a taxi or shuttle.
+     * @param destination inform where the user wants to go.
+     * @return return a vehicle type.
+     */
+    public Vehicle taxiOrShuttle( String destination ){
+
+	    for( Vehicle i : vehicleFleet ){
+	    	
+		if( i.getDestination().equals(destination)){
+			if( i instanceof Shuttle ){
+				
+				Shuttle bus = (Shuttle) i;
+				return bus;
+
+			}
+		}
+
+	    }
+
+	    /*
+	     *  As the user prefer a shuttle than a taxi, so
+	     *  it's necessary run all Shuttle to find a taxi.
+	     */
+
+	    for( Vehicle i : vehicleFleet ){
+	    	if( i instanceof Taxi ){
+			Taxi tx = (Taxi) i;
+			if( tx.getFree() )
+				return tx;
+		}
+	    }
+
+	    // In case of there is not shuttle or taxi.
+	    return null;
+    }
 }
